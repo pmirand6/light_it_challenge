@@ -6,8 +6,10 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Models\Patient;
+
 interface PatientRepositoryContract
 {
-    public function store(array $params);
+    public function store(array $params): Patient;
 
 }

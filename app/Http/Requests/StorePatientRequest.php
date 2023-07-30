@@ -11,7 +11,7 @@ class StorePatientRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,9 @@ class StorePatientRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'email' => 'required|unique:patient|max:100',
+            'email' => 'required|unique:patients|max:100',
             'phone_number' => 'required',
-            'identification_photo' => 'required|'
+            'identification_photo' => 'required|image|mimes:jpeg,png,jpg|max:5120'
         ];
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\PatientServiceException;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\Patient;
 use App\Services\PatientService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -24,9 +26,15 @@ class PatientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePatientRequest $request)
+    public function store(StorePatientRequest $request): JsonResponse
     {
-        //Patient::all()
+        try {
+            $result = $this->patientService->createPatient($request);
+            return response()->json($result->toArray(), 201);
+        } catch (PatientServiceException $exception) {
+            return response()->json($exception->getMessage(), 400);
+        }
+
     }
 
     /**

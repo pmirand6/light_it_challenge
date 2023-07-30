@@ -4,9 +4,9 @@
 #    $ kool run <script>
 # Learn more at: https://kool.dev/docs/getting-started/how-it-works#koolyml
 scripts:
-  composer: kool exec app composer
-  artisan: kool exec app php artisan
-  phpunit: kool exec app php ./bin/phpunit
+  composer: kool exec patients_api composer
+  artisan: kool exec patients_api php artisan
+  phpunit: kool exec patients_api php ./bin/phpunit
   setup:
     - kool run before-start
     - kool start
@@ -19,7 +19,7 @@ scripts:
   before-start:
     - kool docker kooldev/bash -c "cp .env.example .env"
   # CLI access to MySQL
-  mysql: kool exec -e MYSQL_PWD=secret database mysql -u $DB_USERNAME $DB_DATABASE
+  mysql: kool exec -e MYSQL_PWD=secret patients_database mysql -u $DB_USERNAME $DB_DATABASE
 
   # New script to create the database if not exists
-  create-db-if-not-exists: kool exec -e MYSQL_PWD=secret database mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;"
+  create-db-if-not-exists: kool exec -e MYSQL_PWD=secret patients_database mysql -uroot -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;"

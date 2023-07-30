@@ -3,7 +3,7 @@ version: "3.8"
 # Services definitions
 #
 services:
-    app:
+    patients_api:
         container_name: patients_api
         image: kooldev/php:8.1-nginx
         ports:
@@ -11,11 +11,14 @@ services:
         environment:
             ASUSER: "${KOOL_ASUSER:-0}"
             UID: "${UID:-0}"
+            PHP_IDE_CONFIG: "serverName=light-it-app.local"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - .:/app:delegated
         networks:
             - light_it_network
-    database:
+    patients_database:
         container_name: patients_db
         image: mysql:8.0
         restart: always
