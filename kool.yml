@@ -12,7 +12,8 @@ scripts:
     - kool start
     - kool run composer install
     - kool run artisan key:generate
-    - kool run create-db-if-not-exists # New script to create the database if not exists
+    - kool run create-db-if-not-exists
+    - kool run artisan storage:link
   reset:
     - kool run composer install
     - kool run artisan migrate:fresh --seed

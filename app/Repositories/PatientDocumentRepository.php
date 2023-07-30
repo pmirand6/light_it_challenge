@@ -6,11 +6,22 @@
 
 namespace App\Repositories;
 
+use App\Models\PatientDocument;
+use Illuminate\Database\Eloquent\Model;
+
 class PatientDocumentRepository implements Contracts\PatientDocumentRepositoryContract
 {
 
-    public function save(int $patientId, array $params)
+    public function __construct(private readonly PatientDocument $model)
     {
-        // TODO: Implement save() method.
+    }
+
+    public function save(int $patientId, array $params): PatientDocument
+    {
+        return $this->model->create([
+            'patient_id' => $patientId,
+            'document_type' => $params['document_type'],
+            'file_path' => $params['file_path'],
+        ]);
     }
 }
