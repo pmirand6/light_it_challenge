@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\PatientServiceException;
 use App\Http\Requests\StorePatientRequest;
+use App\Http\Resources\PatientResource;
 use App\Models\Patient;
 use App\Services\PatientService;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +31,7 @@ class PatientController extends Controller
     {
         try {
             $result = $this->patientService->createPatient($request);
-            return response()->json($result->toArray(), 201);
+            return response()->json(new PatientResource($result), 201);
         } catch (PatientServiceException $exception) {
             return response()->json($exception->getMessage(), 400);
         }
