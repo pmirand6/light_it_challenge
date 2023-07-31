@@ -53,6 +53,7 @@ Some potential future improvements for the application include:
 - Incorporating Localstack (https://github.com/localstack/localstack) into the application's 
 docker-compose for saving images in S3 and jobs in SQS.
 - Implementing unit tests for application services.
+- Implementing SMS notifications
 
 
 
