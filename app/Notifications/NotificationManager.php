@@ -22,13 +22,20 @@ abstract class NotificationManager
      */
     protected function emailNotification(string $recipient, string $emailClass, array $params): void
     {
-        $className = "App\\Mail\\" . $emailClass;
-        $reflection = new ReflectionClass($className);
-        $instanceParams = $reflection->newInstanceArgs([$params]);
-        Mail::to($recipient)->send($instanceParams);
+        if ($this->sendEmail) {
+            $className = "App\\Mail\\" . $emailClass;
+            $reflection = new ReflectionClass($className);
+            $instanceParams = $reflection->newInstanceArgs([$params]);
+            Mail::to($recipient)->send($instanceParams);
+        }
+
     }
 
-    protected function smsNotification(string $phoneNumber, array $params){
+    protected function smsNotification(string $phoneNumber, array $params)
+    {
+        if ($this->sendSms) {
+            //
+        }
         //TODO IMPLEMENT SMS Notification
     }
 }
