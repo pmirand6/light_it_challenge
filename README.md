@@ -1,66 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Light IT Patient Registry Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains a challenge solution for Light IT. The application serves as a patient registry system.
 
-## About Laravel
+## Tools Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.1
+- Kool.dev (https://kool.dev/docs/presets/laravel) for Docker setup
+- Mailhog (https://github.com/mailhog/MailHog) for email testing
+- MySQL 8.0
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+To set up the environment, follow these steps:
 
-## Learning Laravel
+1. Download the project from the repository.
+2. Run `kool run setup` to install necessary Composer packages, generate the Laravel key, create the `patients_db` database, and create the storage link. (For details on the enabled scripts, refer to kool.yml). Additionally, this command will generate the `.env` file based on the `.env.example`.
+3. The application will run by default on port **8565**.
+4. You can test if the application is running on http://localhost:8565
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Sending Emails
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Emails are sent using Laravel's job feature with the database as the queue. To start listening to Laravel jobs, run `kool run jobs`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Endpoints
 
-## Laravel Sponsors
+The following API endpoints are available:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. **POST** `api/v1/patients`: Add a new patient record.
+2. **GET** `api/v1/patients`: Get a list of all patients.
+3. **GET** `api/v1/patients/{id}`: Get details of a specific patient.
 
-### Premium Partners
+Example of adding a patient record (Remember to attach a file for the identification photo):
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```bash
+curl --location --request POST 'localhost:8565/api/v1/patients' \
+--form 'name="Tromp"' \
+--form 'email="Erik.Zemlak@hotmail.com"' \
+--form 'phone_number="589-930-1251"' \
+--form 'identification_photo=@"/home/user/images/file.png"'
+```
 
-## Contributing
+## Testing Application
+To run tests, execute the following command:
+```bash
+# This command will execute the features tests.
+kool run test
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Future Improvements
+Some potential future improvements for the application include:
 
-## Code of Conduct
+- Incorporating Localstack (https://github.com/localstack/localstack) into the application's 
+docker-compose for saving images in S3 and jobs in SQS.
+- Implementing unit tests for application services.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

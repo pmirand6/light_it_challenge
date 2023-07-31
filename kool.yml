@@ -6,7 +6,8 @@
 scripts:
   composer: kool exec patients_api composer
   artisan: kool exec patients_api php artisan
-  phpunit: kool exec patients_api php ./bin/phpunit
+  test: kool run artisan test
+  jobs: kool run artisan queue:listen
   setup:
     - kool run before-start
     - kool start
