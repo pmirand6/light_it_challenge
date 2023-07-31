@@ -6,14 +6,18 @@ use App\Exceptions\PatientServiceException;
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Resources\PatientResource;
 use App\Models\Patient;
+use App\Repositories\Contracts\PatientRepositoryContract;
 use App\Services\PatientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PatientController extends Controller
 {
-    public function __construct(private readonly PatientService $patientService)
-    {
+    public function __construct(
+        private readonly PatientService $patientService,
+        private readonly PatientRepositoryContract $patientRepositoryContract
+    ) {
     }
 
     /**
@@ -21,7 +25,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        return PatientResource::collection($this->patientRepositoryContract->list());
     }
 
     /**
@@ -43,22 +47,6 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Patient $patient)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Patient $patient)
-    {
-        //
+        return response()->json(new PatientResource($patient));
     }
 }

@@ -12,4 +12,8 @@ interface PatientRepositoryContract
 {
     public function store(array $params): Patient;
 
+    public function list();
+
+    public function show(Patient $patient);
+
 }

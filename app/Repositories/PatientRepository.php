@@ -23,4 +23,14 @@ class PatientRepository implements Contracts\PatientRepositoryContract
     {
         return $this->model->create($params);
     }
+
+    public function list()
+    {
+        return $this->model->paginate(10);
+    }
+
+    public function show(Patient $patient)
+    {
+        return $this->model->find($patient);
+    }
 }
