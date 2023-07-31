@@ -32,6 +32,16 @@ services:
             - light_it_network
         healthcheck:
             test: ["CMD", "mysqladmin", "ping"]
+    patients_mail_server:
+        image: mailhog/mailhog
+        restart: always
+        logging:
+            driver: "none" # disable saving logs
+        ports:
+            - 1026:1025 # smtp server
+            - 8027:8025 # web ui
+        networks:
+            - light_it_network
 #
 # Networks definitions
 #

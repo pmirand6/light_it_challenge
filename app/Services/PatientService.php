@@ -6,11 +6,14 @@
 
 namespace App\Services;
 
+use App\Events\PatientCreated;
 use App\Exceptions\PatientDocumentServiceException;
 use App\Exceptions\PatientServiceException;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\Patient;
 use App\Repositories\Contracts\PatientRepositoryContract;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PatientService
@@ -34,25 +37,54 @@ class PatientService
         try {
             $file = $request->file('identification_photo');
             $patientData = $request->except('identification_photo');
+            $patientResult = $this->storePatient($patientData, $file);
+            PatientCreated::dispatch($patientResult);
+            return $patientResult;
+        } catch (\Exception $e) {
+            Log::error('Error Saving Patient', [
+                'method' => __METHOD__,
+                'error' => $e->getMessage()
+            ]);
+            throw new PatientServiceException($e->getMessage());
+        }
+
+    }
+
+    /**
+     * @param array $patientData
+     * @param array|UploadedFile|null $file
+     * @return Patient
+     * @throws PatientServiceException
+     */
+    protected function storePatient(array $patientData, array|UploadedFile|null $file): Patient
+    {
+        DB::beginTransaction();
+        try {
+            // Creates the patient record
             $patientResult = $this->patientRepository->store($patientData);
+
+            // Creates the related patient's documentation
             $this->patientDocumentService->savePatientDocument([
                 'file' => $file,
                 'patientId' => $patientResult->id,
                 'documentType' => 'identification_photo'
             ]);
+            DB::commit();
             return $patientResult;
         } catch (PatientDocumentServiceException $e) {
             Log::error('Error Saving Document Patient', [
                 'method' => __METHOD__,
                 'error' => $e->getMessage()
             ]);
+            DB::rollBack();
             throw new PatientServiceException($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Error Saving Patient', [
                 'method' => __METHOD__,
                 'error' => $e->getMessage()
             ]);
-            throw new PatientServiceException('Error Saving Patient');
+            DB::rollBack();
+            throw new PatientServiceException('Fatal Error Saving Patient');
         }
 
     }
